@@ -1,0 +1,44 @@
+//SELECT ALL
+db.categories.find();
+//SELECT WITH WHERE
+db.customers.find({ city: 'Lisboa' });
+//INSERT ONE RECORD
+//---CREATE;
+db.categories.insertOne({
+  category_id: 9,
+  category_name: 'Sodas',
+  description: 'Sodas',
+});
+//UPDATE RECORD
+db.categories.updateOne(
+  { category_name: 'Sodas' },
+  {
+    $set: { description: 'cm' },
+  },
+);
+//DELETE RECORD
+db.categories.deleteOne({ category_name: 'Sodas' });
+//ORDER BY
+db.categories.find().sort({ category_id: -1 });
+//GROUP BY
+db.categories.aggregate({
+  $group: {
+    _id: null,
+    count: { $sum: 1 },
+  },
+});
+
+//--Retrieve record with group by supplier_id and count where unit_price less than 7
+db.products.aggregate([
+  {
+    $match: { supplier_id: { $lte: 7 } },
+  },
+  {
+    $group: {
+      _id: {
+        supplier_id: '$supplier_id',
+      },
+      count: { $sum: 1 },
+    },
+  },
+]);
